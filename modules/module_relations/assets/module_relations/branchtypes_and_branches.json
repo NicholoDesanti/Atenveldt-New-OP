@@ -1,0 +1,1 @@
+[{"module_name":"branchtypes","record_name_singular":"branchtype","record_name_plural":"branchtypes","identifier_column":"name"},{"module_name":"branches","record_name_singular":"branch","record_name_plural":"branches","identifier_column":"name"},{"relationship_type":"one to many"}]
