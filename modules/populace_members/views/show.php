@@ -8,6 +8,8 @@
         <?php 
         echo anchor('populace_members/manage', 'View All Populace Members', array("class" => "button alt"));
         echo anchor('populace_members/create/'.$update_id, 'Update Details', array("class" => "button"));
+        echo anchor('populace_members/profile/'.$update_id, 'View Profile', array("class" => "button alt"));
+
         $attr_delete = array( 
             "class" => "danger go-right",
             "id" => "btn-delete-modal",

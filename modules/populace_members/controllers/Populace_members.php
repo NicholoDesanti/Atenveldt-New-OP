@@ -36,6 +36,45 @@ class Populace_members extends Trongate {
     }
 
     /**
+/**
+ * Display a public profile page for a populace member.
+ *
+ * @param int $update_id The ID of the populace member whose profile to display.
+ * @return void
+ */
+function profile(int $update_id): void {
+    // Ensure access is allowed (check if user is logged in as admin)
+    $this->module('trongate_security');
+    $is_admin_logged_in = ($this->trongate_security->_make_sure_allowed() !== null);
+
+    if ($update_id == 0) {
+        // Display a custom error message or page if no valid update_id is provided
+        $data['error_message'] = 'Invalid profile ID. Please provide a valid ID.';
+        $this->view('error_page', $data); // Assuming 'error_page.php' is your custom error page view
+        return;
+    }
+
+    // Fetch data for the specified populace member
+    $data = $this->_get_data_from_db($update_id);
+
+    if ($data === null) {
+        // Display a custom error message or page if no data found for the specified update_id
+        $data['error_message'] = 'Profile not found. Please check the provided ID.';
+        $this->view('error_page', $data); // Assuming 'error_page.php' is your custom error page view
+        return;
+    }
+
+    // Pass admin login status to the view
+    $data['is_admin_logged_in'] = $is_admin_logged_in;
+    $data['update_id'] = $update_id;
+
+    $data['view_file'] = 'profile';
+    $this->template('public', $data);
+}
+
+
+
+    /**
      * Display a webpage to manage records.
      *
      * @return void
