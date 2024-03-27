@@ -71,6 +71,49 @@ function profile(int $update_id): void {
     $data['view_file'] = 'profile';
     $this->template('public', $data);
 }
+function search_members(): void {
+   
+    // Get the search query from the URL parameter
+    $search_query = isset($_GET['q']) ? trim($_GET['q']) : '';
+
+    // Perform search query to fetch suggestions based on name field
+    if ($search_query !== '') {
+        $params['name'] = '%' . $search_query . '%';
+        $sql = 'SELECT id, name FROM populace_members WHERE name LIKE :name ORDER BY name ASC';
+        $suggestions = $this->model->query_bind($sql, $params, 'object');
+    } else {
+        $suggestions = [];
+    }
+
+    // Pass the suggestions and search query to the view
+    $data['search_query'] = $search_query;
+    $data['suggestions'] = $suggestions;
+    $data['view_file'] = 'search_members';
+    $this->template('public', $data);
+}
+
+function search_suggestions(): void {
+    $this->module('trongate_security');
+    $this->trongate_security->_make_sure_allowed();
+
+    // Get the search query from the URL parameter
+    $search_query = isset($_GET['q']) ? trim($_GET['q']) : '';
+
+    // Perform search query to fetch suggestions based on name field
+    if ($search_query !== '') {
+        $params['name'] = '%' . $search_query . '%';
+        $sql = 'SELECT id, name FROM populace_members WHERE name LIKE :name ORDER BY name ASC';
+        $suggestions = $this->model->query_bind($sql, $params, 'object');
+    } else {
+        $suggestions = [];
+    }
+
+    // Output suggestions as JSON
+    header('Content-Type: application/json');
+    echo json_encode($suggestions);
+    exit();
+}
+
 
 
 
