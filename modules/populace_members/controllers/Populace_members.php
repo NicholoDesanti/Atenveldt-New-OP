@@ -88,6 +88,7 @@ function search_members(): void {
     // Pass the suggestions and search query to the view
     $data['search_query'] = $search_query;
     $data['suggestions'] = $suggestions;
+    $data['view_module'] = 'populace_members'; // Indicates the module where the view file exists.
     $data['view_file'] = 'search_members';
     $this->template('public', $data);
 }

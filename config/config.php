@@ -15,11 +15,10 @@
     Thank you and may the code be with you! - David Connelly (founder)
 */
 
-//The main config file
 define('BASE_URL', 'http://localhost/atenop/Atenveldt-New-OP/');
 define('ENV', 'dev');
-define('DEFAULT_MODULE', 'welcome');
-define('DEFAULT_CONTROLLER', 'Welcome');
-define('DEFAULT_METHOD', 'index');
+define('DEFAULT_MODULE', 'Populace_members');
+define('DEFAULT_CONTROLLER', 'Populace_members');
+define('DEFAULT_METHOD', 'search_members'); // Set this to your desired main landing page method
 define('MODULE_ASSETS_TRIGGER', '_module');
 define('INTERCEPT_404', 'trongate_pages/attempt_display');
