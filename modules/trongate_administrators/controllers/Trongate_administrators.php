@@ -3,7 +3,7 @@ class Trongate_administrators extends Trongate {
 
     //NOTE: the default username and password is 'admin' and 'admin'
     //private $secret_login_segment = 'tg-admin';
-    private $dashboard_home = 'trongate_pages/manage'; //where to go after login
+    private $dashboard_home = 'populace_members/manage'; //where to go after login
 
 
     /**

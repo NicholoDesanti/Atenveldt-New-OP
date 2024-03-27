@@ -44,8 +44,7 @@ class Populace_members extends Trongate {
  */
 function profile(int $update_id): void {
     // Ensure access is allowed (check if user is logged in as admin)
-    $this->module('trongate_security');
-    $is_admin_logged_in = ($this->trongate_security->_make_sure_allowed() !== null);
+
 
     if ($update_id == 0) {
         // Display a custom error message or page if no valid update_id is provided
@@ -65,7 +64,7 @@ function profile(int $update_id): void {
     }
 
     // Pass admin login status to the view
-    $data['is_admin_logged_in'] = $is_admin_logged_in;
+    
     $data['update_id'] = $update_id;
 
     $data['view_file'] = 'profile';
@@ -94,8 +93,6 @@ function search_members(): void {
 }
 
 function search_suggestions(): void {
-    $this->module('trongate_security');
-    $this->trongate_security->_make_sure_allowed();
 
     // Get the search query from the URL parameter
     $search_query = isset($_GET['q']) ? trim($_GET['q']) : '';
