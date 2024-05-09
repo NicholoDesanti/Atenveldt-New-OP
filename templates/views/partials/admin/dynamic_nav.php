@@ -3,4 +3,5 @@
     <li><?= anchor('awards/manage', '<i class="fa fa-certificate"></i> Manage Awards') ?></li>
     <li><?= anchor('honorary_titles/manage', '<i class="fa fa-at"></i> Manage Honorary Titles') ?></li>
     <li><?= anchor('populace_members/manage', '<i class="fa fa-user"></i> Manage Populace Members') ?></li>
+    <li><?= anchor('populace_awards/manage', '<i class="fa fa-mortar-board"></i> Manage Populace Awards') ?></li>
 </ul>
