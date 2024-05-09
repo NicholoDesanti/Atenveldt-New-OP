@@ -1,5 +1,5 @@
 <?php
-class Populace_awards extends Trongate {
+class Crowns extends Trongate {
 
     private $default_limit = 20;
     private $per_page_options = array(10, 20, 50, 100);    
@@ -16,26 +16,21 @@ class Populace_awards extends Trongate {
 
         if (($submit == '') && ($update_id>0)) {
             $data = $this->_get_data_from_db($update_id);
-            $data['date'] = format_date_str($data['date']);
+            $data['end_date'] = format_date_str($data['end_date']);
+            $data['start_date'] = format_date_str($data['start_date']);
         } else {
             $data = $this->_get_data_from_post();
         }
 
-        $data['populace_members_options'] = $this->_get_populace_members_options($data['populace_members_id']);
-
-        $data['awards_options'] = $this->_get_awards_options($data['awards_id']);
-
-        $data['branches_options'] = $this->_get_branches_options($data['branches_id']);
-
         if ($update_id>0) {
-            $data['headline'] = 'Update Populace Award Record';
-            $data['cancel_url'] = BASE_URL.'populace_awards/show/'.$update_id;
+            $data['headline'] = 'Update Crown Record';
+            $data['cancel_url'] = BASE_URL.'crowns/show/'.$update_id;
         } else {
-            $data['headline'] = 'Create New Populace Award Record';
-            $data['cancel_url'] = BASE_URL.'populace_awards/manage';
+            $data['headline'] = 'Create New Crown Record';
+            $data['cancel_url'] = BASE_URL.'crowns/manage';
         }
 
-        $data['form_location'] = BASE_URL.'populace_awards/submit/'.$update_id;
+        $data['form_location'] = BASE_URL.'crowns/submit/'.$update_id;
         $data['view_file'] = 'create';
         $this->template('admin', $data);
     }
@@ -52,26 +47,25 @@ class Populace_awards extends Trongate {
         if (segment(4) !== '') {
             $data['headline'] = 'Search Results';
             $searchphrase = trim($_GET['searchphrase']);
-            $params['name'] = '%'.$searchphrase.'%';
-            $sql = 'select * from populace_awards ORDER BY id';
+            $sql = 'select * from crowns ORDER BY id';
             $all_rows = $this->model->query_bind($sql, $params, 'object');
         } else {
-            $data['headline'] = 'Manage Populace Awards';
+            $data['headline'] = 'Manage Crowns';
             $all_rows = $this->model->get('id');
         }
 
         $pagination_data['total_rows'] = count($all_rows);
         $pagination_data['page_num_segment'] = 3;
         $pagination_data['limit'] = $this->_get_limit();
-        $pagination_data['pagination_root'] = 'populace_awards/manage';
-        $pagination_data['record_name_plural'] = 'populace awards';
+        $pagination_data['pagination_root'] = 'crowns/manage';
+        $pagination_data['record_name_plural'] = 'crowns';
         $pagination_data['include_showing_statement'] = true;
         $data['pagination_data'] = $pagination_data;
 
         $data['rows'] = $this->_reduce_rows($all_rows);
         $data['selected_per_page'] = $this->_get_selected_per_page();
         $data['per_page_options'] = $this->per_page_options;
-        $data['view_module'] = 'populace_awards';
+        $data['view_module'] = 'crowns';
         $data['view_file'] = 'manage';
         $this->template('admin', $data);
     }
@@ -87,17 +81,17 @@ class Populace_awards extends Trongate {
         $update_id = (int) segment(3);
 
         if ($update_id == 0) {
-            redirect('populace_awards/manage');
+            redirect('crowns/manage');
         }
 
         $data = $this->_get_data_from_db($update_id);
         $data['token'] = $token;
 
         if ($data == false) {
-            redirect('populace_awards/manage');
+            redirect('crowns/manage');
         } else {
             $data['update_id'] = $update_id;
-            $data['headline'] = 'Populace Award Information';
+            $data['headline'] = 'Crown Information';
             $data['view_file'] = 'show';
             $this->template('admin', $data);
         }
@@ -140,7 +134,8 @@ class Populace_awards extends Trongate {
 
         if ($submit == 'Submit') {
 
-            $this->validation_helper->set_rules('date', 'Date', 'required|valid_datepicker_us');
+            $this->validation_helper->set_rules('start_date', 'Start Date', 'valid_datepicker_us|required');
+            $this->validation_helper->set_rules('end_date', 'End Date', 'valid_datepicker_us|required');
 
             $result = $this->validation_helper->run();
 
@@ -148,24 +143,21 @@ class Populace_awards extends Trongate {
 
                 $update_id = (int) segment(3);
                 $data = $this->_get_data_from_post();
-                $data['branches_id'] = (is_numeric($data['branches_id']) ? $data['branches_id'] : 0);
-                $data['awards_id'] = (is_numeric($data['awards_id']) ? $data['awards_id'] : 0);
-                $data['populace_members_id'] = (is_numeric($data['populace_members_id']) ? $data['populace_members_id'] : 0);
-                $data['url_string'] = strtolower(url_title($data['date']));
-                $data['date'] = date('Y-m-d', strtotime($data['date']));
+                $data['end_date'] = date('Y-m-d', strtotime($data['end_date']));
+                $data['start_date'] = date('Y-m-d', strtotime($data['start_date']));
                 
                 if ($update_id>0) {
                     //update an existing record
-                    $this->model->update($update_id, $data, 'populace_awards');
+                    $this->model->update($update_id, $data, 'crowns');
                     $flash_msg = 'The record was successfully updated';
                 } else {
                     //insert the new record
-                    $update_id = $this->model->insert($data, 'populace_awards');
+                    $update_id = $this->model->insert($data, 'crowns');
                     $flash_msg = 'The record was successfully created';
                 }
 
                 set_flashdata($flash_msg);
-                redirect('populace_awards/show/'.$update_id);
+                redirect('crowns/show/'.$update_id);
 
             } else {
                 //form submission error
@@ -191,18 +183,18 @@ class Populace_awards extends Trongate {
         if (($submit == 'Yes - Delete Now') && ($params['update_id']>0)) {
             //delete all of the comments associated with this record
             $sql = 'delete from trongate_comments where target_table = :module and update_id = :update_id';
-            $params['module'] = 'populace_awards';
+            $params['module'] = 'crowns';
             $this->model->query_bind($sql, $params);
 
             //delete the record
-            $this->model->delete($params['update_id'], 'populace_awards');
+            $this->model->delete($params['update_id'], 'crowns');
 
             //set the flashdata
             $flash_msg = 'The record was successfully deleted';
             set_flashdata($flash_msg);
 
             //redirect to the manage page
-            redirect('populace_awards/manage');
+            redirect('crowns/manage');
         }
     }
 
@@ -264,7 +256,7 @@ class Populace_awards extends Trongate {
         }
 
         $_SESSION['selected_per_page'] = $selected_index;
-        redirect('populace_awards/manage');
+        redirect('crowns/manage');
     }
 
     /**
@@ -275,7 +267,7 @@ class Populace_awards extends Trongate {
      * @return array|null An array of data or null if the record doesn't exist.
      */
     function _get_data_from_db(int $update_id): ?array {
-        $record_obj = $this->model->get_where($update_id, 'populace_awards');
+        $record_obj = $this->model->get_where($update_id, 'crowns');
 
         if ($record_obj == false) {
             $this->template('error_404');
@@ -292,28 +284,9 @@ class Populace_awards extends Trongate {
      * @return array Data from the POST request.
      */
     function _get_data_from_post(): array {
-        $data['date'] = post('date', true);        
-        $data['populace_members_id'] = post('populace_members_id');
-        $data['awards_id'] = post('awards_id');
-        $data['branches_id'] = post('branches_id');
+        $data['start_date'] = post('start_date', true);
+        $data['end_date'] = post('end_date', true);        
         return $data;
     }
 
-    function _get_populace_members_options($selected_key) {
-        $this->module('module_relations');
-        $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'populace_members');
-        return $options;
-    }
-
-    function _get_awards_options($selected_key) {
-        $this->module('module_relations');
-        $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'awards');
-        return $options;
-    }
-
-    function _get_branches_options($selected_key) {
-        $this->module('module_relations');
-        $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'branches');
-        return $options;
-    }
 }
