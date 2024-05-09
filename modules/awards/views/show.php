@@ -35,8 +35,6 @@
             </div>
         </div>
     </div>
-    
-    <?= Modules::run('module_relations/_draw_summary_panel', 'populace_awards', $token) ?>
 
     <div class="card">
         <div class="card-heading">
