@@ -46,6 +46,7 @@ class Populace_awards extends Trongate {
         if (segment(4) !== '') {
             $data['headline'] = 'Search Results';
             $searchphrase = trim($_GET['searchphrase']);
+            $params['name'] = '%'.$searchphrase.'%';
             $sql = 'select * from populace_awards ORDER BY id';
             $all_rows = $this->model->query_bind($sql, $params, 'object');
         } else {
