@@ -17,7 +17,7 @@
         ?>
     </div>
 </div>
-<div class="two-col">
+<div class="three-col">
     <div class="card">
         <div class="card-heading">
             Award Details
@@ -35,6 +35,7 @@
             </div>
         </div>
     </div>
+
     <div class="card">
         <div class="card-heading">
             Comments
