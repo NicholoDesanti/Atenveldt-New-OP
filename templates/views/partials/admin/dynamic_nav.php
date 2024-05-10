@@ -5,4 +5,5 @@
     <li><?= anchor('populace_members/manage', '<i class="fa fa-user"></i> Manage Populace Members') ?></li>
     <li><?= anchor('crowns/manage', '<i class="fa fa-sun-o"></i> Manage Crowns') ?></li>
 
+    <li><?= anchor('populace_awards/manage', '<i class="fa fa-trophy"></i> Manage Populace Awards') ?></li>
 </ul>
