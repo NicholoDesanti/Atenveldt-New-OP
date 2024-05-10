@@ -1,0 +1,3 @@
+[ { "module_name": "populace_members", "record_name_singular": "populace member", "record_name_plural": "populace members", "identifier_column": "name" }, { "module_name": "crowns", "record_name_singular": "crown", "record_name_plural": "crowns", "identifier_column": "sovereign" }, { "relationship_type": "many to many" } ,
+{ "module_name": "populace_members", "record_name_singular": "populace member", "record_name_plural": "populace members", "identifier_column": "name" }, { "module_name": "crowns", "record_name_singular": "crown", "record_name_plural": "crowns", "identifier_column": "consort" }, { "relationship_type": "many to many" } ]
+
