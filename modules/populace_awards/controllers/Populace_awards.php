@@ -39,7 +39,7 @@ class Populace_awards extends Trongate {
 
         $data['form_location'] = BASE_URL.'populace_awards/submit/'.$update_id;
         $data['view_file'] = 'create';
-        $this->template('admin', $data);
+         $this->template('bootstrappy', $data);
     }
 
     /**
@@ -74,7 +74,7 @@ class Populace_awards extends Trongate {
         $data['per_page_options'] = $this->per_page_options;
         $data['view_module'] = 'populace_awards';
         $data['view_file'] = 'manage';
-        $this->template('admin', $data);
+         $this->template('bootstrappy', $data);
     }
 
     /**
@@ -100,7 +100,7 @@ class Populace_awards extends Trongate {
             $data['update_id'] = $update_id;
             $data['headline'] = 'Populace Award Information';
             $data['view_file'] = 'show';
-            $this->template('admin', $data);
+             $this->template('bootstrappy', $data);
         }
     }
     
