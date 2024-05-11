@@ -25,7 +25,7 @@ class Crowns extends Trongate {
         } else {
             $data = $this->_get_data_from_post();
         }
-    
+        $data['branches_options'] = $this->_get_branches_options($data['branches_id']);
         if ($update_id>0) {
             $data['headline'] = 'Update Crown Record';
             $data['cancel_url'] = BASE_URL.'crowns/show/'.$update_id;
@@ -170,6 +170,7 @@ function _reduce_rows(array $all_rows): array {
 
                 $update_id = (int) segment(3);
                 $data = $this->_get_data_from_post();
+                $data['branches_id'] = (is_numeric($data['branches_id']) ? $data['branches_id'] : 0);
                 $data['url_string'] = strtolower(url_title($data['reign']));
                 $data['heirs'] = ($data['heirs'] == 1 ? 1 : 0);
                 $data['end_date'] = date('Y-m-d', strtotime($data['end_date']));
@@ -319,6 +320,7 @@ function _reduce_rows(array $all_rows): array {
         $data['start_date'] = post('start_date', true);
         $data['end_date'] = post('end_date', true);
         $data['heirs'] = post('heirs', true);        
+        $data['branches_id'] = post('branches_id');
         return $data;
     }
     function _get_populace_options($selected_key = null) {
@@ -348,12 +350,9 @@ function _get_populace_name(?int $populace_id): ?string {
     return null;
 }
 
-
-
-
-
-
-
-
-
+    function _get_branches_options($selected_key) {
+        $this->module('module_relations');
+        $options = $this->module_relations->_fetch_options($selected_key, 'crowns', 'branches');
+        return $options;
+    }
 }

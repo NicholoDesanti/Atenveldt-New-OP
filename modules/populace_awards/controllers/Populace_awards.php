@@ -312,11 +312,33 @@ class Populace_awards extends Trongate {
         $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'awards');
         return $options;
     }
-
     function _get_crowns_options($selected_key) {
         $this->module('module_relations');
         $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'crowns');
-        return $options;
+    
+        // Check if the options array already contains a blank (empty string) value
+        $has_blank_option = in_array('', $options, true);
+    
+        // Initialize the crown options array
+        $crown_options = [];
+    
+        // If there is no blank option, add the "Select..." option
+        if (!$has_blank_option) {
+            $crown_options[''] = 'Select...';
+        }
+    
+        // Remove the integer option 0 from the options array
+        unset($options[""]);
+    
+        // Iterate through each option
+        foreach ($options as $crown_id => $crown_name) {
+            // Ensure that $crown_id is converted to an integer
+            $crown_id = (int) $crown_id;
+            // Replace the crown ID with the combined name using _get_crown_name function
+            $crown_options[$crown_id] = $this->_get_crown_name($crown_id);
+        }
+    
+        return $crown_options;
     }
 
     function _get_populace_members_options($selected_key) {
@@ -324,4 +346,90 @@ class Populace_awards extends Trongate {
         $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'populace_members');
         return $options;
     }
+
+    /**
+     * Get branch name based on its ID.
+     *
+     * @param int|null $branches_id The ID of the branch.
+     *
+     * @return string|null The name of the branch or null if not found.
+     */
+    function _get_branches_name(?int $branches_id): ?string {
+        if ($branches_id === null) {
+            return null; // or return an empty string if you prefer
+        }
+
+        // Assuming 'branches' is the name of your branches table
+        $branch = $this->model->get_where($branches_id, 'branches');
+
+        if ($branch) {
+            return $branch->name; // Assuming 'name' is the column storing the branch name
+        }
+        return null;
+    }
+
+    /**
+     * Retrieve a member's name based on their ID.
+     *
+     * @param int|null $populace_id The ID of the populace member.
+     *
+     * @return string|null The name of the member, or null if not found.
+     */
+    function _get_populace_name(?int $populace_id): ?string {
+        if ($populace_id === null) {
+            return null;
+        }
+
+        // Fetch the record from the 'populace_members' table
+        $member = $this->model->get_where($populace_id, 'populace_members');
+
+        if ($member) {
+            return $member->name; // Replace 'name' with the actual column name for the member's full name
+        }
+
+        return null;
+    }
+ 
+    function _get_award_name(?int $award_id): ?string {
+        if ($award_id === null) {
+            return null;
+        }
+
+        // Fetch the record from the 'awards' table
+        $award = $this->model->get_where($award_id, 'awards');
+
+        if ($award) {
+            return $award->name; // Replace 'name' with the actual column name for the award's name
+        }
+
+        return null;
+    }
+
+    function _get_crown_name(?int $crown_id): ?string {
+        if ($crown_id === null) {
+            return null;
+        }
+
+        // Fetch the record from the 'crowns' table
+        $crown = $this->model->get_where($crown_id, 'crowns');
+
+        if ($crown) {
+            // Fetch names of Sovereign and Consort using _get_populace_name function
+            $sovereign_name = $this->_get_populace_name($crown->sovereign);
+            $consort_name = $this->_get_populace_name($crown->consort);
+
+            // Combine names if both are not null, otherwise use the available name
+            if ($sovereign_name !== null && $consort_name !== null) {
+                return $sovereign_name . ' & ' . $consort_name;
+            } elseif ($sovereign_name !== null) {
+                return $sovereign_name;
+            } elseif ($consort_name !== null) {
+                return $consort_name;
+            }
+        }
+
+        return null;
+    }
+
 }
+?>
