@@ -60,6 +60,11 @@ class Populace_awards extends Trongate {
             $data['headline'] = 'Manage Populace Awards';
             $all_rows = $this->model->get('id');
         }
+        foreach ($all_rows as $row) {
+            $row->award_name = $this->_get_award_name($row->awards_id);
+            $row->crown_name = $this->_get_crown_name($row->crowns_id);
+            $row->populace_members_name = $this->_get_populace_name($row->populace_members_id);
+        }
 
         $pagination_data['total_rows'] = count($all_rows);
         $pagination_data['page_num_segment'] = 3;
@@ -99,6 +104,9 @@ class Populace_awards extends Trongate {
         } else {
             $data['update_id'] = $update_id;
             $data['headline'] = 'Populace Award Information';
+            $data['award_name'] = $this->_get_award_name($data['awards_id']);
+        $data['crown_name'] = $this->_get_crown_name($data['crowns_id']);
+        $data['populace_members_name'] = $this->_get_populace_name($data['populace_members_id']);
             $data['view_file'] = 'show';
              $this->template('bootstrappy', $data);
         }
@@ -340,7 +348,58 @@ class Populace_awards extends Trongate {
     
         return $crown_options;
     }
+    function get_awards_by_branch() {
+        $branch_id = (int) post('branch_id');
+        $options = $this->_get_awards_options_by_branch($branch_id);
+        echo json_encode($options);
+    }
+    
+    function get_crowns_by_branch() {
+        $branch_id = (int) post('branch_id');
+        $options = $this->_get_crowns_options_by_branch($branch_id);
+        echo json_encode($options);
+    }
+    
+    private function _get_awards_options_by_branch($branch_id) {
+        $params['branch_id'] = $branch_id;
+        $sql = 'SELECT id, name FROM awards WHERE branches_id = :branch_id';
+        $results = $this->model->query_bind($sql, $params, 'object');
+        $options = [];
+    
+        foreach ($results as $result) {
+            $options[$result->id] = $result->name;
+        }
+    
+        return $options;
+    }
+    
+    private function _get_crowns_options_by_branch($branch_id) {
+        $this->module('module_relations');
 
+        if ($branch_id == 41) {
+            // Special logic for branches_id 41
+            $sql = 'SELECT c.id 
+                    FROM crowns c 
+                    JOIN branches b ON c.branches_id = b.id 
+                    WHERE b.branchtypes_id = :branchtypes_id';
+            $params = ['branchtypes_id' => 1];
+        } else {
+            // Default logic for other branches
+            $sql = 'SELECT id FROM crowns WHERE branches_id = :branch_id';
+            $params = ['branch_id' => $branch_id];
+        }
+
+        $results = $this->model->query_bind($sql, $params, 'object');
+        $options = [];
+
+        foreach ($results as $result) {
+            $options[$result->id] = $this->_get_crown_name($result->id);
+        }
+
+        return $options;
+    }
+    
+    
     function _get_populace_members_options($selected_key) {
         $this->module('module_relations');
         $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'populace_members');

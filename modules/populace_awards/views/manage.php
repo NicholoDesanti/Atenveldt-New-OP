@@ -11,7 +11,7 @@ if (count($rows)>0) { ?>
     <table id="results-tbl">
         <thead>
             <tr>
-                <th colspan="2">
+                <th colspan="5">
                     <div>
                         <div><?php
                         echo form_open('populace_awards/manage/1/', array("method" => "get"));
@@ -29,6 +29,11 @@ if (count($rows)>0) { ?>
             </tr>
             <tr>
                 <th>Date Received</th>
+                <th>Populace Member</th>
+                <th>Award</th>
+                <th>Crown</th>
+                
+
                 <th style="width: 20px;">Action</th>            
             </tr>
         </thead>
@@ -38,7 +43,11 @@ if (count($rows)>0) { ?>
             foreach($rows as $row) { ?>
             <tr>
                 <td><?= date('l jS F Y',  strtotime($row->date_received)) ?></td>
-                <td><?= anchor('populace_awards/show/'.$row->id, 'View', $attr) ?></td>        
+                <td><?= out($row->populace_members_name) ?></td>
+                <td><?= out($row->award_name) ?></td>
+                <td><?= out($row->crown_name) ?></td>
+                <td><?= anchor('populace_awards/show/'.$row->id, 'View', $attr) ?></td> 
+                       
             </tr>
             <?php
             }
