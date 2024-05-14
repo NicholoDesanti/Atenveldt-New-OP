@@ -50,22 +50,35 @@ class Populace_awards extends Trongate {
     function manage(): void {
         $this->module('trongate_security');
         $this->trongate_security->_make_sure_allowed();
-
+    
         if (segment(4) !== '') {
             $data['headline'] = 'Search Results';
             $searchphrase = trim($_GET['searchphrase']);
-            $sql = 'select * from populace_awards ORDER BY id';
+            $params['searchphrase'] = '%' . $searchphrase . '%';
+    
+            // Search in related tables and join with populace_awards
+            $sql = 'SELECT pa.* 
+                    FROM populace_awards pa
+                    LEFT JOIN awards a ON pa.awards_id = a.id
+                    LEFT JOIN crowns c ON pa.crowns_id = c.id
+                    LEFT JOIN populace_members pm ON pa.populace_members_id = pm.id
+                    WHERE a.name LIKE :searchphrase
+                    OR c.sovereign IN (SELECT id FROM populace_members WHERE name LIKE :searchphrase)
+                    OR c.consort IN (SELECT id FROM populace_members WHERE name LIKE :searchphrase)
+                    OR pm.name LIKE :searchphrase
+                    ORDER BY pa.id';
             $all_rows = $this->model->query_bind($sql, $params, 'object');
         } else {
             $data['headline'] = 'Manage Populace Awards';
             $all_rows = $this->model->get('id');
         }
+    
         foreach ($all_rows as $row) {
             $row->award_name = $this->_get_award_name($row->awards_id);
             $row->crown_name = $this->_get_crown_name($row->crowns_id);
             $row->populace_members_name = $this->_get_populace_name($row->populace_members_id);
         }
-
+    
         $pagination_data['total_rows'] = count($all_rows);
         $pagination_data['page_num_segment'] = 3;
         $pagination_data['limit'] = $this->_get_limit();
@@ -73,15 +86,14 @@ class Populace_awards extends Trongate {
         $pagination_data['record_name_plural'] = 'populace awards';
         $pagination_data['include_showing_statement'] = true;
         $data['pagination_data'] = $pagination_data;
-
+    
         $data['rows'] = $this->_reduce_rows($all_rows);
         $data['selected_per_page'] = $this->_get_selected_per_page();
         $data['per_page_options'] = $this->per_page_options;
         $data['view_module'] = 'populace_awards';
         $data['view_file'] = 'manage';
-         $this->template('bootstrappy', $data);
+        $this->template('bootstrappy', $data);
     }
-
     /**
      * Display a webpage showing information for an individual record.
      *
