@@ -1,0 +1,1 @@
+[{"module_name":"award_types","record_name_singular":"award type","record_name_plural":"award types","identifier_column":"type"},{"module_name":"awards","record_name_singular":"award","record_name_plural":"awards","identifier_column":"name"},{"relationship_type":"one to many"}]

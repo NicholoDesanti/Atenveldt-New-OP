@@ -6,4 +6,5 @@
     <li><?= anchor('crowns/manage', '<i class="fa fa-sun-o"></i> Manage Crowns') ?></li>
 
     <li><?= anchor('populace_awards/manage', '<i class="fa fa-trophy"></i> Manage Populace Awards') ?></li>
+    <li><?= anchor('populace_honorarys/manage', '<i class="fa fa-header"></i> Populace Honorary Awards & Titles') ?></li>
 </ul>

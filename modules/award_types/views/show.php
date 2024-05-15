@@ -6,8 +6,8 @@
     </div>
     <div class="card-body">
         <?php 
-        echo anchor('crowns/manage', 'View All Crowns', array("class" => "button alt"));
-        echo anchor('crowns/create/'.$update_id, 'Update Details', array("class" => "button"));
+        echo anchor('award_types/manage', 'View All Award Types', array("class" => "button alt"));
+        echo anchor('award_types/create/'.$update_id, 'Update Details', array("class" => "button"));
         $attr_delete = array( 
             "class" => "danger go-right",
             "id" => "btn-delete-modal",
@@ -20,39 +20,19 @@
 <div class="three-col">
     <div class="card">
         <div class="card-heading">
-            Crown Details
+            Award Type Details
         </div>
         <div class="card-body">
             <div class="record-details">
                 <div class="row">
-                    <div>Reign</div>
-                    <div><?= out($reign) ?></div>
-                </div>
-                <div class="row">
-                    <div>Sovereign</div>
-                    <div><?= out($sovereign_name) ?></div>
-                </div>
-                <div class="row">
-                    <div>Consort</div>
-                    <div><?= out($consort_name) ?></div>
-                </div>
-                <div class="row">
-                    <div>Start Date</div>
-                    <div><?= date('l jS F Y',  strtotime($start_date)) ?></div>
-                </div>
-                <div class="row">
-                    <div>End Date</div>
-                    <div><?= date('l jS F Y',  strtotime($end_date)) ?></div>
-                </div>
-                <div class="row">
-                    <div>Heirs</div>
-                    <div><?= out($heirs) ?></div>
+                    <div>Type</div>
+                    <div><?= out($type) ?></div>
                 </div>
             </div>
         </div>
     </div>
     
-    <?= Modules::run('module_relations/_draw_summary_panel', 'populace_honorarys', $token) ?>
+    <?= Modules::run('module_relations/_draw_summary_panel', 'awards', $token) ?>
 
     <div class="card">
         <div class="card-heading">
@@ -84,9 +64,9 @@
 <div class="modal" id="delete-modal" style="display: none;">
     <div class="modal-heading danger"><i class="fa fa-trash"></i> Delete Record</div>
     <div class="modal-body">
-        <?= form_open('crowns/submit_delete/'.$update_id) ?>
+        <?= form_open('award_types/submit_delete/'.$update_id) ?>
         <p>Are you sure?</p>
-        <p>You are about to delete a Crown record.  This cannot be undone.  Do you really want to do this?</p> 
+        <p>You are about to delete an Award Type record.  This cannot be undone.  Do you really want to do this?</p> 
         <?php 
         echo '<p>'.form_button('close', 'Cancel', $attr_close);
         echo form_submit('submit', 'Yes - Delete Now', array("class" => 'danger')).'</p>';
