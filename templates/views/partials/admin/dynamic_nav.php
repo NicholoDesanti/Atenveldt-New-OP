@@ -7,4 +7,5 @@
 
     <li><?= anchor('populace_awards/manage', '<i class="fa fa-trophy"></i> Manage Populace Awards') ?></li>
     <li><?= anchor('populace_honorarys/manage', '<i class="fa fa-header"></i> Populace Honorary Awards & Titles') ?></li>
+    <li><?= anchor('officer_positions/manage', '<i class="fa fa-legal"></i> Manage Officer Positions') ?></li>
 </ul>

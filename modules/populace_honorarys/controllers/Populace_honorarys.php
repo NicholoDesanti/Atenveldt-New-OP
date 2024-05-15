@@ -22,11 +22,8 @@ class Populace_honorarys extends Trongate {
         }
 
         $data['honorary_titles_options'] = $this->_get_honorary_titles_options($data['honorary_titles_id']);
-
         $data['branches_options'] = $this->_get_branches_options($data['branches_id']);
-
         $data['populace_members_options'] = $this->_get_populace_members_options($data['populace_members_id']);
-
         $data['crowns_options'] = $this->_get_crowns_options($data['crowns_id']);
 
         if ($update_id>0) {
@@ -39,7 +36,7 @@ class Populace_honorarys extends Trongate {
 
         $data['form_location'] = BASE_URL.'populace_honorarys/submit/'.$update_id;
         $data['view_file'] = 'create';
-        $this->template('admin', $data);
+        $this->template('bootstrappy', $data);
     }
 
     /**
@@ -54,11 +51,28 @@ class Populace_honorarys extends Trongate {
         if (segment(4) !== '') {
             $data['headline'] = 'Search Results';
             $searchphrase = trim($_GET['searchphrase']);
-            $sql = 'select * from populace_honorarys ORDER BY id';
+            $params['searchphrase'] = '%' . $searchphrase . '%';
+    
+            // Search in related tables and join with populace_honorarys
+            $sql = 'SELECT ph.* 
+                    FROM populace_honorarys ph
+                    LEFT JOIN honorary_titles ht ON ph.honorary_titles_id = ht.id
+                    LEFT JOIN crowns c ON ph.crowns_id = c.id
+                    LEFT JOIN populace_members pm ON ph.populace_members_id = pm.id
+                    WHERE ht.name LIKE :searchphrase
+                    OR c.sovereign IN (SELECT id FROM populace_members WHERE name LIKE :searchphrase)
+                    OR c.consort IN (SELECT id FROM populace_members WHERE name LIKE :searchphrase)
+                    OR pm.name LIKE :searchphrase
+                    ORDER BY ph.id';
             $all_rows = $this->model->query_bind($sql, $params, 'object');
         } else {
             $data['headline'] = 'Manage Populace Honorarys';
             $all_rows = $this->model->get('id');
+        }
+        foreach ($all_rows as $row) {
+            $row->honorary_title_name = $this->_get_honorary_title_name($row->honorary_titles_id);
+            $row->crown_name = $this->_get_crown_name($row->crowns_id);
+            $row->populace_members_name = $this->_get_populace_name($row->populace_members_id);
         }
 
         $pagination_data['total_rows'] = count($all_rows);
@@ -74,7 +88,7 @@ class Populace_honorarys extends Trongate {
         $data['per_page_options'] = $this->per_page_options;
         $data['view_module'] = 'populace_honorarys';
         $data['view_file'] = 'manage';
-        $this->template('admin', $data);
+        $this->template('bootstrappy', $data);
     }
 
     /**
@@ -99,8 +113,14 @@ class Populace_honorarys extends Trongate {
         } else {
             $data['update_id'] = $update_id;
             $data['headline'] = 'Populace Honorary Information';
+        $data['honorary_title_name'] = $this->_get_honorary_title_name($data['honorary_titles_id']);
+        $data['crown_name'] = $this->_get_crown_name($data['crowns_id']);
+        $data['populace_members_name'] = $this->_get_populace_name($data['populace_members_id']);
+            
             $data['view_file'] = 'show';
-            $this->template('admin', $data);
+    
+
+            $this->template('bootstrappy', $data);
         }
     }
     
@@ -324,4 +344,119 @@ class Populace_honorarys extends Trongate {
         $options = $this->module_relations->_fetch_options($selected_key, 'populace_honorarys', 'crowns');
         return $options;
     }
+
+    function get_honorary_titles_by_branch() {
+        $branch_id = (int) post('branch_id');
+        $options = $this->_get_honorary_titles_options_by_branch($branch_id);
+        echo json_encode($options);
+    }
+
+    function get_crowns_by_branch() {
+        $branch_id = (int) post('branch_id');
+        $options = $this->_get_crowns_options_by_branch($branch_id);
+        echo json_encode($options);
+    }
+
+    private function _get_honorary_titles_options_by_branch($branch_id) {
+        $params['branch_id'] = $branch_id;
+        $sql = 'SELECT id, name FROM honorary_titles WHERE branches_id = :branch_id';
+        $results = $this->model->query_bind($sql, $params, 'object');
+        $options = [];
+    
+        foreach ($results as $result) {
+            $options[$result->id] = $result->name;
+        }
+    
+        return $options;
+    }
+
+    private function _get_crowns_options_by_branch($branch_id) {
+        $this->module('module_relations');
+
+        if ($branch_id == 41) {
+            // Special logic for branches_id 41
+            $sql = 'SELECT c.id 
+                    FROM crowns c 
+                    JOIN branches b ON c.branches_id = b.id 
+                    WHERE b.branchtypes_id = :branchtypes_id';
+            $params = ['branchtypes_id' => 1];
+        } else {
+            // Default logic for other branches
+            $sql = 'SELECT id FROM crowns WHERE branches_id = :branch_id';
+            $params = ['branch_id' => $branch_id];
+        }
+
+        $results = $this->model->query_bind($sql, $params, 'object');
+        $options = [];
+
+        foreach ($results as $result) {
+            $options[$result->id] = $this->_get_crown_name($result->id);
+        }
+
+        return $options;
+    }
+
+    /**
+     * Retrieve a member's name based on their ID.
+     *
+     * @param int|null $populace_id The ID of the populace member.
+     *
+     * @return string|null The name of the member, or null if not found.
+     */
+    function _get_populace_name(?int $populace_id): ?string {
+        if ($populace_id === null) {
+            return null;
+        }
+
+        // Fetch the record from the 'populace_members' table
+        $member = $this->model->get_where($populace_id, 'populace_members');
+
+        if ($member) {
+            return $member->name; // Replace 'name' with the actual column name for the member's full name
+        }
+
+        return null;
+    }
+
+    function _get_honorary_title_name(?int $honorary_title_id): ?string {
+        if ($honorary_title_id === null) {
+            return null;
+        }
+
+        // Fetch the record from the 'honorary_titles' table
+        $honorary_title = $this->model->get_where($honorary_title_id, 'honorary_titles');
+
+        if ($honorary_title) {
+            return $honorary_title->name; // Replace 'name' with the actual column name for the honorary title
+        }
+
+        return null;
+    }
+
+    function _get_crown_name(?int $crown_id): ?string {
+        if ($crown_id === null) {
+            return null;
+        }
+
+        // Fetch the record from the 'crowns' table
+        $crown = $this->model->get_where($crown_id, 'crowns');
+
+        if ($crown) {
+            // Fetch names of Sovereign and Consort using _get_populace_name function
+            $sovereign_name = $this->_get_populace_name($crown->sovereign);
+            $consort_name = $this->_get_populace_name($crown->consort);
+
+            // Combine names if both are not null, otherwise use the available name
+            if ($sovereign_name !== null && $consort_name !== null) {
+                return $sovereign_name . ' & ' . $consort_name;
+            } elseif ($sovereign_name !== null) {
+                return $sovereign_name;
+            } elseif ($consort_name !== null) {
+                return $consort_name;
+            }
+        }
+
+        return null;
+    }
 }
+?>
