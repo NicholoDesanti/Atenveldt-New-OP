@@ -32,7 +32,7 @@ class Officer_positions extends Trongate {
 
         $data['form_location'] = BASE_URL.'officer_positions/submit/'.$update_id;
         $data['view_file'] = 'create';
-        $this->template('admin', $data);
+        $this->template('bootstrappy', $data);
     }
 
     /**
@@ -80,7 +80,7 @@ class Officer_positions extends Trongate {
         $data['per_page_options'] = $this->per_page_options;
         $data['view_module'] = 'officer_positions';
         $data['view_file'] = 'manage';
-        $this->template('admin', $data);
+        $this->template('bootstrappy', $data);
     }
 
     /**
@@ -107,7 +107,7 @@ class Officer_positions extends Trongate {
             $data['branch_name'] = $this->_get_branches_name($data['branches_id']);
             $data['headline'] = 'Officer Position Information';
             $data['view_file'] = 'show';
-            $this->template('admin', $data);
+            $this->template('bootstrappy', $data);
         }
     }
     

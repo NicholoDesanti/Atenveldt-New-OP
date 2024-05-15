@@ -1,0 +1,1 @@
+[{"module_name":"branches","record_name_singular":"branch","record_name_plural":"branches","identifier_column":"name"},{"module_name":"populace_positions","record_name_singular":"populace position","record_name_plural":"populace positions","identifier_column":"officer_positions_id"},{"relationship_type":"one to many"}]

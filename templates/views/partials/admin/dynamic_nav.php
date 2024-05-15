@@ -10,4 +10,5 @@
     <li><?= anchor('populace_awards/manage', '<i class="fa fa-trophy"></i> Populace Awards') ?></li>
     <li><?= anchor('populace_honorarys/manage', '<i class="fa fa-header"></i>Honorary Awards & Titles') ?></li>
 
+    <li><?= anchor('populace_positions/manage', '<i class="fa fa-shield"></i> Populace Held Positions') ?></li>
 </ul>
