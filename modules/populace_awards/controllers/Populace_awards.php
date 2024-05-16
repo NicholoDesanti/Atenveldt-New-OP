@@ -191,7 +191,7 @@ class Populace_awards extends Trongate {
                 set_flashdata($flash_msg);
                 
                 // Debugging step to check if flash message is set
-                if (session_has('flashdata')) {
+                if (isset($_SESSION['flashdata'])) {
                     echo "Flash message is set.";
                 } else {
                     echo "Failed to set flash message.";
