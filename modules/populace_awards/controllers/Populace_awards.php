@@ -158,17 +158,17 @@ class Populace_awards extends Trongate {
     function submit(): void {
         $this->module('trongate_security');
         $this->trongate_security->_make_sure_allowed();
-
+    
         $submit = post('submit', true);
-
+    
         if ($submit == 'Submit') {
-
+    
             $this->validation_helper->set_rules('date_received', 'Date Received', 'required|valid_datepicker_us');
-
+    
             $result = $this->validation_helper->run();
-
+    
             if ($result == true) {
-
+    
                 $update_id = (int) segment(3);
                 $data = $this->_get_data_from_post();
                 $data['populace_aliass_id'] = (is_numeric($data['populace_aliass_id']) ? $data['populace_aliass_id'] : 0);
@@ -178,26 +178,36 @@ class Populace_awards extends Trongate {
                 $data['branches_id'] = (is_numeric($data['branches_id']) ? $data['branches_id'] : 0);
                 $data['date_received'] = date('Y-m-d', strtotime($data['date_received']));
                 
-                if ($update_id>0) {
-                    //update an existing record
+                if ($update_id > 0) {
+                    // Update an existing record
                     $this->model->update($update_id, $data, 'populace_awards');
                     $flash_msg = 'The record was successfully updated';
                 } else {
-                    //insert the new record
+                    // Insert the new record
                     $update_id = $this->model->insert($data, 'populace_awards');
                     $flash_msg = 'The record was successfully created';
                 }
-
+    
                 set_flashdata($flash_msg);
-                redirect('populace_awards/show/'.$update_id);
-
+                
+                // Debugging step to check if flash message is set
+                if (session_has('flashdata')) {
+                    echo "Flash message is set.";
+                } else {
+                    echo "Failed to set flash message.";
+                }
+    
+                // Debugging step to confirm redirect URL
+                $redirect_url = 'populace_awards/show/' . $update_id;
+                echo "Redirecting to: " . BASE_URL . $redirect_url;
+    
+                // Perform the redirection
+                redirect($redirect_url);
             } else {
-                //form submission error
+                // Form submission error
                 $this->create();
             }
-
         }
-
     }
 
     /**
