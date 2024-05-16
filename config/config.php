@@ -15,7 +15,7 @@
     Thank you and may the code be with you! - David Connelly (founder)
 */
 
-define('BASE_URL', 'http://localhost/atenop/Atenveldt-New-OP/');
+define('BASE_URL', 'http://testing.site.atenveldt.org/');
 define('ENV', 'dev');
 define('DEFAULT_MODULE', 'Populace_members');
 define('DEFAULT_CONTROLLER', 'Populace_members');

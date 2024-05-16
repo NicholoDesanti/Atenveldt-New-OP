@@ -1,7 +1,7 @@
 <?php
 //Database settings
-define('HOST', '127.0.0.1');
+define('HOST', 'testingsite.atenveldt.com');
 define('PORT', '3306');
-define('USER', 'root');
-define('PASSWORD', '');
-define('DATABASE', 'atenop');
+define('USER', 'nicholo');
+define('PASSWORD', 'pAZeo2022!');
+define('DATABASE', 'atenopv2');
