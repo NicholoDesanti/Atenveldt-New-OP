@@ -2,21 +2,21 @@
 <?= validation_errors() ?>
 <div class="card">
     <div class="card-heading">
-        Populace Honorary Details
+        Populace Position Details
     </div>
     <div class="card-body">
         <?php
         echo form_open($form_location);
-        echo form_label('Date Earned');
-        $attr = array("class"=>"date-picker", "autocomplete"=>"off", "placeholder"=>"Select Date Earned");
-        echo form_input('date_earned', $date_earned, $attr);
+        echo form_label('End Date');
+        $attr = array("class"=>"date-picker", "autocomplete"=>"off", "placeholder"=>"Select End Date");
+        echo form_input('end_date', $end_date, $attr);
         echo form_label('Associated Branch');
         echo form_dropdown('branches_id', $branches_options, $branches_id, array('id' => 'branches_id'));
-        echo form_label('Honorary Title');
-        echo form_dropdown('honorary_titles_id', $honorary_titles_options, $honorary_titles_id, array('id' => 'honorary_titles_id'));
+        echo form_label('Associated Officer Position');
+        echo form_dropdown('officer_positions_id', $officer_positions_options, $officer_positions_id, array('id' => 'officer_positions_id'));
         echo form_label('Associated Crown');
         echo form_dropdown('crowns_id', $crowns_options, $crowns_id, array('id' => 'crowns_id'));
-        echo form_label('Populace Member');
+        echo form_label('Associated Populace Member');
         echo form_dropdown('populace_members_id', $populace_members_options, $populace_members_id);
         echo form_submit('submit', 'Submit');
         echo anchor($cancel_url, 'Cancel', array('class' => 'button alt'));
@@ -52,7 +52,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: '<?= BASE_URL ?>populace_honorarys/get_crowns_by_branch',
+            url: '<?= BASE_URL ?>populace_positions/get_crowns_by_branch',
             data: {branch_id: branch_id},
             success: function(response) {
                 var crowns = JSON.parse(response);
