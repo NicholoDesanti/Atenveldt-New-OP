@@ -17,7 +17,9 @@
         echo form_label('Associated Crown');
         echo form_dropdown('crowns_id', $crowns_options, $crowns_id, array('id' => 'crowns_id'));
         echo form_label('Associated Populace Member');
-        echo form_dropdown('populace_members_id', $populace_members_options, $populace_members_id);
+        echo form_dropdown('populace_members_id', $populace_members_options, $populace_members_id, array('id' => 'populace_members_id'));
+        echo form_label('Associated Alias');
+        echo form_dropdown('populace_aliass_id', $populace_aliass_options, $populace_aliass_id, array('id' => 'populace_aliass_id'));
         echo form_submit('submit', 'Submit');
         echo anchor($cancel_url, 'Cancel', array('class' => 'button alt'));
         echo form_close();
@@ -39,7 +41,7 @@ $(document).ready(function() {
                 var awards = JSON.parse(response);
                 var awardsDropdown = $('#awards_id');
                 awardsDropdown.empty();
-                awardsDropdown.append('<option value="">Select...</option>'); // Add the "Select..." option
+                awardsDropdown.append('<option value="">Select...</option>');
 
                 $.each(awards, function(key, value) {
                     awardsDropdown.append($('<option></option>').attr('value', key).text(value));
@@ -58,7 +60,7 @@ $(document).ready(function() {
                 var crowns = JSON.parse(response);
                 var crownsDropdown = $('#crowns_id');
                 crownsDropdown.empty();
-                crownsDropdown.append('<option value="">Select...</option>'); // Add the "Select..." option
+                crownsDropdown.append('<option value="">Select...</option>');
 
                 $.each(crowns, function(key, value) {
                     crownsDropdown.append($('<option></option>').attr('value', key).text(value));
@@ -66,6 +68,29 @@ $(document).ready(function() {
             },
             error: function() {
                 alert('Error fetching crowns.');
+            }
+        });
+    });
+
+    $('#populace_members_id').change(function() {
+        var populace_member_id = $(this).val();
+
+        $.ajax({
+            type: 'POST',
+            url: '<?= BASE_URL ?>populace_awards/get_aliases_by_member',
+            data: {populace_member_id: populace_member_id},
+            success: function(response) {
+                var aliases = JSON.parse(response);
+                var aliasesDropdown = $('#populace_aliass_id');
+                aliasesDropdown.empty();
+                aliasesDropdown.append('<option value="">Select...</option>');
+
+                $.each(aliases, function(key, value) {
+                    aliasesDropdown.append($('<option></option>').attr('value', key).text(value));
+                });
+            },
+            error: function() {
+                alert('Error fetching aliases.');
             }
         });
     });

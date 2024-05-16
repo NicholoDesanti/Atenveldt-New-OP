@@ -1,0 +1,1 @@
+[{"module_name":"populace_aliass","record_name_singular":"populace alias","record_name_plural":"populace aliass","identifier_column":"name"},{"module_name":"populace_awards","record_name_singular":"populace award","record_name_plural":"populace awards","identifier_column":"populace_members_id"},{"relationship_type":"one to many"}]

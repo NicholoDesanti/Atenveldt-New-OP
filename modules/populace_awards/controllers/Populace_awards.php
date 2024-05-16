@@ -29,6 +29,8 @@ class Populace_awards extends Trongate {
 
         $data['populace_members_options'] = $this->_get_populace_members_options($data['populace_members_id']);
 
+        $data['populace_aliass_options'] = $this->_get_populace_aliass_options($data['populace_aliass_id']);
+
         if ($update_id>0) {
             $data['headline'] = 'Update Populace Award Record';
             $data['cancel_url'] = BASE_URL.'populace_awards/show/'.$update_id;
@@ -169,6 +171,7 @@ class Populace_awards extends Trongate {
 
                 $update_id = (int) segment(3);
                 $data = $this->_get_data_from_post();
+                $data['populace_aliass_id'] = (is_numeric($data['populace_aliass_id']) ? $data['populace_aliass_id'] : 0);
                 $data['populace_members_id'] = (is_numeric($data['populace_members_id']) ? $data['populace_members_id'] : 0);
                 $data['crowns_id'] = (is_numeric($data['crowns_id']) ? $data['crowns_id'] : 0);
                 $data['awards_id'] = (is_numeric($data['awards_id']) ? $data['awards_id'] : 0);
@@ -318,6 +321,7 @@ class Populace_awards extends Trongate {
         $data['awards_id'] = post('awards_id');
         $data['crowns_id'] = post('crowns_id');
         $data['populace_members_id'] = post('populace_members_id');
+        $data['populace_aliass_id'] = post('populace_aliass_id');
         return $data;
     }
 
@@ -501,6 +505,39 @@ class Populace_awards extends Trongate {
 
         return null;
     }
+    function _get_populace_aliass_options($selected_key) {
+        $this->module('module_relations');
+        $options = $this->module_relations->_fetch_options($selected_key, 'populace_awards', 'populace_aliass');
+        return $options;
+    }
+    function get_aliases_by_member() {
+        $populace_member_id = (int) post('populace_member_id');
+        $options = $this->_get_populace_aliass_options_by_member($populace_member_id);
+        echo json_encode($options);
+    }
+    
+    private function _get_populace_aliass_options_by_member($populace_member_id) {
+        $params['populace_member_id'] = $populace_member_id;
+        $sql = 'SELECT id, name FROM populace_aliass WHERE populace_members_id = :populace_member_id';
+        $results = $this->model->query_bind($sql, $params, 'object');
+        $options = [];
+    
+        foreach ($results as $result) {
+            if (!empty($result->name)) { // Assuming 'name' is the column for alias names
+                $options[$result->id] = $result->name;
+            }
+        }
+    
+        return $options;
+    }
+
+
+
 
 }
+
+
+
 ?>
+
+ 
