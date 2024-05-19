@@ -1,1 +1,0 @@
-[{"module_name":"populace_members","record_name_singular":"populace member","record_name_plural":"populace members","identifier_column":"name"},{"module_name":"populace_honorarys","record_name_singular":"populace honorary","record_name_plural":"populace honorarys","identifier_column":"id"},{"relationship_type":"one to many"}]

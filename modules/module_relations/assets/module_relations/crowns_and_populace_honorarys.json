@@ -1,1 +1,0 @@
-[{"module_name":"crowns","record_name_singular":"crown","record_name_plural":"crowns","identifier_column":"id"},{"module_name":"populace_honorarys","record_name_singular":"populace honorary","record_name_plural":"populace honorarys","identifier_column":"id"},{"relationship_type":"one to many"}]
