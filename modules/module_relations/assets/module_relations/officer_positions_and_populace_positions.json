@@ -1,1 +1,0 @@
-[{"module_name":"officer_positions","record_name_singular":"officer position","record_name_plural":"officer positions","identifier_column":"title"},{"module_name":"populace_positions","record_name_singular":"populace position","record_name_plural":"populace positions","identifier_column":"id"},{"relationship_type":"one to many"}]
