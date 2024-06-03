@@ -10,6 +10,27 @@
 	<!-- don't change anything above here -->
 	<!-- add your own stylesheet below here -->
 	<title>Public</title>
+	<style>
+		.admin-login-button {
+			display: inline-block;
+			padding: 10px 20px;
+			font-size: 16px;
+			font-weight: bold;
+			color: white;
+			background-color: #007BFF;
+			border: none;
+			border-radius: 5px;
+			text-decoration: none;
+			text-align: center;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			margin-left: 10px;
+		}
+
+		.admin-login-button:hover {
+			background-color: #0056b3;
+		}
+	</style>
 </head>
 
 <body>
@@ -22,16 +43,21 @@
 				<div class="logo">
 					<?= anchor(BASE_URL, WEBSITE_NAME) ?>
 				</div>
-				<div><?php
-							echo anchor('account', '<i class="fa fa-user"></i>');
-							echo anchor('logout', '<i class="fa fa-sign-out"></i>');
-							?></div>
+				<div>
+					<?= anchor('account', '<i class="fa fa-user"></i>') ?>
+					<?= anchor('logout', '<i class="fa fa-sign-out"></i>') ?>
+					<!-- Admin Login Button -->
+					<a href="http://testing.site.atenveldt.org/tg-admin" class="admin-login-button">Admin Login</a>
+				</div>
 			</div>
 			<div id="header-lg">
 				<div class="logo">
 					<?= anchor(BASE_URL, WEBSITE_NAME) ?>
 				</div>
-				
+				<div>
+					<!-- Admin Login Button -->
+					<a href="http://testing.site.atenveldt.org/tg-admin" class="admin-login-button">Admin Login</a>
+				</div>
 			</div>
 		</header>
 		<main class="container"><?= Template::display($data) ?></main>
