@@ -28,11 +28,11 @@
             <div class="record-details">
                 <div class="row">
                     <div>Name</div>
-                    <div><?= out($name) ?></div>
+                    <div><?= out(out($name)) ?></div>
                 </div>
                 <div class="row">
                     <div>Preferred Pronoun</div>
-                    <div><?= out($preferred_pronoun) ?></div>
+                    <div><?= out(out($preferred_pronoun)) ?></div>
                 </div>
                 <div class="row">
                     <div>Associated Branch</div>
@@ -47,9 +47,6 @@
             </div>
         </div>
     </div>
-
-    
-    <?= Modules::run('module_relations/_draw_summary_panel', 'populace_aliass', $token) ?>
 
     <div class="card">
         <div class="card-heading">

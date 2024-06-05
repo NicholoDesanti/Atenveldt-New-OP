@@ -50,35 +50,22 @@ class Populace_awards extends Trongate {
     function manage(): void {
         $this->module('trongate_security');
         $this->trongate_security->_make_sure_allowed();
-    
+
         if (segment(4) !== '') {
             $data['headline'] = 'Search Results';
             $searchphrase = trim($_GET['searchphrase']);
-            $params['searchphrase'] = '%' . $searchphrase . '%';
-    
-            // Search in related tables and join with populace_awards
-            $sql = 'SELECT pa.* 
-                    FROM populace_awards pa
-                    LEFT JOIN awards a ON pa.awards_id = a.id
-                    LEFT JOIN crowns c ON pa.crowns_id = c.id
-                    LEFT JOIN populace_members pm ON pa.populace_members_id = pm.id
-                    WHERE a.name LIKE :searchphrase
-                    OR c.sovereign IN (SELECT id FROM populace_members WHERE name LIKE :searchphrase)
-                    OR c.consort IN (SELECT id FROM populace_members WHERE name LIKE :searchphrase)
-                    OR pm.name LIKE :searchphrase
-                    ORDER BY pa.id';
+            $sql = 'select * from populace_awards ORDER BY id';
             $all_rows = $this->model->query_bind($sql, $params, 'object');
         } else {
             $data['headline'] = 'Manage Populace Awards';
             $all_rows = $this->model->get('id');
         }
-    
         foreach ($all_rows as $row) {
             $row->award_name = $this->_get_award_name($row->awards_id);
             $row->crown_name = $this->_get_crown_name($row->crowns_id);
             $row->populace_members_name = $this->_get_populace_name($row->populace_members_id);
         }
-    
+
         $pagination_data['total_rows'] = count($all_rows);
         $pagination_data['page_num_segment'] = 3;
         $pagination_data['limit'] = $this->_get_limit();
@@ -86,14 +73,15 @@ class Populace_awards extends Trongate {
         $pagination_data['record_name_plural'] = 'populace awards';
         $pagination_data['include_showing_statement'] = true;
         $data['pagination_data'] = $pagination_data;
-    
+
         $data['rows'] = $this->_reduce_rows($all_rows);
         $data['selected_per_page'] = $this->_get_selected_per_page();
         $data['per_page_options'] = $this->per_page_options;
         $data['view_module'] = 'populace_awards';
         $data['view_file'] = 'manage';
-        $this->template('bootstrappy', $data);
+         $this->template('bootstrappy', $data);
     }
+
     /**
      * Display a webpage showing information for an individual record.
      *
@@ -156,17 +144,17 @@ class Populace_awards extends Trongate {
     function submit(): void {
         $this->module('trongate_security');
         $this->trongate_security->_make_sure_allowed();
-    
+
         $submit = post('submit', true);
-    
+
         if ($submit == 'Submit') {
-    
+
             $this->validation_helper->set_rules('date_received', 'Date Received', 'required|valid_datepicker_us');
-    
+
             $result = $this->validation_helper->run();
-    
+
             if ($result == true) {
-    
+
                 $update_id = (int) segment(3);
                 $data = $this->_get_data_from_post();
                 $data['populace_members_id'] = (is_numeric($data['populace_members_id']) ? $data['populace_members_id'] : 0);
@@ -175,36 +163,26 @@ class Populace_awards extends Trongate {
                 $data['branches_id'] = (is_numeric($data['branches_id']) ? $data['branches_id'] : 0);
                 $data['date_received'] = date('Y-m-d', strtotime($data['date_received']));
                 
-                if ($update_id > 0) {
-                    // Update an existing record
+                if ($update_id>0) {
+                    //update an existing record
                     $this->model->update($update_id, $data, 'populace_awards');
                     $flash_msg = 'The record was successfully updated';
                 } else {
-                    // Insert the new record
+                    //insert the new record
                     $update_id = $this->model->insert($data, 'populace_awards');
                     $flash_msg = 'The record was successfully created';
                 }
-    
+
                 set_flashdata($flash_msg);
-                
-                // Debugging step to check if flash message is set
-                if (isset($_SESSION['flashdata'])) {
-                    echo "Flash message is set.";
-                } else {
-                    echo "Failed to set flash message.";
-                }
-    
-                // Debugging step to confirm redirect URL
-                $redirect_url = 'populace_awards/show/' . $update_id;
-                echo "Redirecting to: " . BASE_URL . $redirect_url;
-    
-                // Perform the redirection
-                redirect($redirect_url);
+                redirect('populace_awards/show/'.$update_id);
+
             } else {
-                // Form submission error
+                //form submission error
                 $this->create();
             }
+
         }
+
     }
 
     /**

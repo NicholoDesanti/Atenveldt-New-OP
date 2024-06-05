@@ -94,24 +94,6 @@
             ?>
         </div>
     </div>
-    <?= Modules::run('module_relations/_draw_summary_panel', 'awards', $token) ?>
-
-
-    
-    <?= Modules::run('module_relations/_draw_summary_panel', 'honorary_titles', $token) ?>
-
-
-    
-    <?= Modules::run('module_relations/_draw_summary_panel', 'populace_awards', $token) ?>
-
-    
-    <?= Modules::run('module_relations/_draw_summary_panel', 'crowns', $token) ?>
-
-    
-
-
-    
-    <?= Modules::run('module_relations/_draw_summary_panel', 'officer_positions', $token) ?>
 
     <div class="card">
         <div class="card-heading">
