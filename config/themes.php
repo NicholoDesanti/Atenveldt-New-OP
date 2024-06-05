@@ -12,12 +12,12 @@ $bootstrappy_theme = [
 ];
 
 $themes['bootstrappy'] = $bootstrappy_theme;
-define('THEMES', $themes);
+
 
 $bootstrap5_theme = [
     "dir" => "bootstrap5/2024",
     "template" => "bootstrap5.php",
 ];
 $themes['bootstrap5'] = $bootstrap5_theme;
-
+define('THEMES', $themes);
 
