@@ -25,7 +25,7 @@
           <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
-          <ul class="dropdown-menu text-small" style="">
+          <ul class="dropdown-menu text-small">
             <li><?= anchor('trongate_administrators/create/1', '<i class=\'fa fa-shield\'></i> Profile ') ?></li>
             <li><?= anchor('trongate_administrators/manage', '<i class=\'fa fa-users\'></i> Manage Users ') ?></li>
             <li><hr class="dropdown-divider"></li>
