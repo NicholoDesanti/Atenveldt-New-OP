@@ -32,7 +32,7 @@ class Populace_members extends Trongate {
 
         $data['form_location'] = BASE_URL.'populace_members/submit/'.$update_id;
         $data['view_file'] = 'create';
-        $this->template('bootstrappy', $data);
+        $this->template('bootstrap5', $data);
     }
 
     /**
@@ -160,7 +160,7 @@ function search_suggestions(): void {
         $data['per_page_options'] = $this->per_page_options;
         $data['view_module'] = 'populace_members';
         $data['view_file'] = 'manage';
-        $this->template('bootstrappy', $data);
+        $this->template('bootstrap5', $data);
     }
 
     /**
@@ -186,7 +186,7 @@ function search_suggestions(): void {
             $data['update_id'] = $update_id;
             $data['headline'] = 'Populace Member Information';
             $data['view_file'] = 'show';
-            $this->template('bootstrappy', $data);
+            $this->template('bootstrap5', $data);
         }
     }
     
