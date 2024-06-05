@@ -68,7 +68,7 @@ function profile(int $update_id): void {
     $data['update_id'] = $update_id;
 
     $data['view_file'] = 'profile';
-    $this->template('public', $data);
+    $this->template('bootstrap5', $data);
 }
 function search_members(): void {
    
