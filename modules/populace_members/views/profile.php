@@ -3,8 +3,8 @@
 <div class="container my-5">
  <div class="row p-4 align-items-center rounded-3 border border-light-subtle shadow-lg">
       <div class="col-lg-7 p-3 p-lg-5">
-        <h1 class="display-4 fw-bold lh-1 text-body-emphasis"><?php echo htmlspecialchars($name); ?><</h1>
-        <p class="lead">Barony of Atenveldt</p>
+        <h1 class="display-4 fw-bold lh-1 text-body-emphasis"><?php echo htmlspecialchars($name); ?></h1>
+        <p class="lead"><? echo htmlspecialchars($branch); ?></p>
         <ul class="list-group list-group-flush p-2 pb-lg-5">
             <li class="list-group-item"><strong class="d-inline-block text-primary-emphasis">Preferred Title</strong> <?php echo htmlspecialchars($preferred_title); ?></li>
             <li class="list-group-item"><strong class="d-inline-block text-primary-emphasis">Pronouns</strong> <?php echo htmlspecialchars($preferred_pronoun); ?></li>
