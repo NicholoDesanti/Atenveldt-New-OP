@@ -56,6 +56,7 @@ function profile(int $update_id): void {
     // Fetch data for the specified populace member
     $data = $this->_get_data_from_db($update_id);
 
+
     if ($data === null) {
         // Display a custom error message or page if no data found for the specified update_id
         $data['error_message'] = 'Profile not found. Please check the provided ID.';

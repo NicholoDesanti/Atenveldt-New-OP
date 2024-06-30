@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>css/trongate.css">
     <link rel="stylesheet" href="<?= THEME_DIR ?>css/bootstrap.min.css">
 	<title>Kingdom of Atenveldt - Order of Precedence</title>
+    <style>
+        .centered-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            text-align: center;
+        }
+        .main-container {
+            max-width: 1200px; /* Adjust as needed */
+            width: 100%;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,37 +34,16 @@
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
           <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
         </form>
-
-        <div class="dropdown text-end">
-          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="User Avatar" width="32" height="32" class="rounded-circle">
-          </a>
-          <ul class="dropdown-menu text-small">
-            <li><?= anchor('trongate_administrators/create/1', '<i class="fa fa-shield"></i> Profile') ?></li>
-            <li><?= anchor('trongate_administrators/manage', '<i class="fa fa-users"></i> Manage Users') ?></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><?= anchor('trongate_administrators/logout', '<i class="fa fa-sign-out"></i> Logout') ?></li>
-          </ul>
-        </div>
       </div>
     </div>
 </header>
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-      <?= Template::partial('partials/admin/bootstrap-5-nav') ?>
-    </div>
-
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="row justify-content-center centered-content">
+    <main class="main-container">
       <?= Template::display($data) ?>
     </main>
   </div>
-</div>
-
-<div id="slide-nav">
-    <div id="close-btn" onclick="closeSlideNav()">&times;</div>
-    <ul auto-populate="true"></ul>
 </div>
 
 <div class="footer">
