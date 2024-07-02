@@ -11,14 +11,14 @@
           <!--   <li class="list-group-item"><strong class="d-inline-block text-primary-emphasis">Pronounciation</strong> <?php echo htmlspecialchars($pronounciation); ?></li> -->
            <!--  <li class="list-group-item"><strong class="d-inline-block text-primary-emphasis">Notes/Alias</strong> <?php echo htmlspecialchars($alias); ?></li> -->
         </ul>
-       <!--  <div class="d-flex flex-column flex-md-row gap-3">
+         <div class="d-flex flex-column flex-md-row gap-3">
             <a href="#" class="btn btn-bd-primary d-flex align-items-center justify-content-center fw-semibold" onclick="ga('Award recommendation');">
               Award recommendation
             </a>
             <a href="#" class="btn btn-outline-secondary" onclick="ga('Submit correction');">
               Submit correction
             </a>
-          </div> -->
+          </div>
       </div>
       <div class="col-lg-4 p-3 shadow-lg">
           <img class="img img-fluid" src="populace_members_module/Images/NoImage.jpg" alt="" width="720">
