@@ -24,9 +24,7 @@
           <img class="img img-fluid" src="populace_members_module/Images/NoImage.jpg" alt="" width="720">
       </div>
     </div>
-</div>
-<div class="container">
-        <div class="row mt-lg-5">
+    <div class="row mt-lg-5">
             <div class="col-md-6">
             <div class="row g-0 border border-light-subtle rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 bg-light position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
@@ -50,9 +48,8 @@
                 <img class="img img-fluid" src="populace_members_module/Images/NoArms.jpg" alt="" width="150">
                 </div>
             </div>
-        </div>        
-    </div>   
-  </div>
+</div>
+
   <div class="container">
   <div class="row mt-lg-5"> 
         <div class="">
