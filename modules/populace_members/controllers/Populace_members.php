@@ -7,6 +7,16 @@ class Populace_members extends Trongate {
     /**
      * Display a webpage with a form for creating or updating a record.
      */
+    function _init_filezone_settings() {
+        $data['targetModule'] = 'populace_members';
+        $data['destination'] = 'populace_members_pictures';
+        $data['max_file_size'] = 1200;
+        $data['max_width'] = 2500;
+        $data['max_height'] = 1400;
+        $data['upload_to_module'] = true;
+        return $data;
+    }
+
     function create(): void {
         $this->module('trongate_security');
         $this->trongate_security->_make_sure_allowed();
@@ -186,6 +196,7 @@ function search_suggestions(): void {
         } else {
             $data['update_id'] = $update_id;
             $data['headline'] = 'Populace Member Information';
+            $data['filezone_settings'] = $this->_init_filezone_settings();
             $data['view_file'] = 'show';
             $this->template('bootstrappy', $data);
         }

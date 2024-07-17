@@ -34,6 +34,55 @@ function truncate_words(string $value, int $max_words): string {
 }
 
 /**
+ * Retrieves the last part of a string based on a delimiter.
+ *
+ * @param string $str The input string to retrieve the last part from.
+ * @param string $delimiter The delimiter used to split the string (default: '-').
+ * @return string The last part of the input string.
+ */
+function get_last_part(string $str, string $delimiter = '-'): string {
+    if (strpos($str, $delimiter) !== false) {
+        $parts = explode($delimiter, $str);
+        $last_part = end($parts);
+    } else {
+        $last_part = $str;
+    }
+    return $last_part;
+}
+
+/**
+ * Removes a portion of a string between two given substrings.
+ *
+ * @param string $start The starting substring.
+ * @param string $end The ending substring.
+ * @param string $haystack The string from which to remove the substring.
+ * @param bool $remove_all Optional argument to remove all matching portions. Defaults to false.
+ * @return string The modified string.
+ */
+function remove_substr_between(string $start, string $end, string $haystack, bool $remove_all = false): string {
+    if (!$remove_all) {
+        $start_pos = strpos($haystack, $start);
+        if ($start_pos === false) {
+            return $haystack;
+        }
+        $end_pos = strpos($haystack, $end, $start_pos + strlen($start));
+        if ($end_pos === false) {
+            return $haystack;
+        }
+        return substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
+    } else {
+        while (($start_pos = strpos($haystack, $start)) !== false) {
+            $end_pos = strpos($haystack, $end, $start_pos + strlen($start));
+            if ($end_pos === false) {
+                break;
+            }
+            $haystack = substr($haystack, 0, $start_pos) . substr($haystack, $end_pos + strlen($end));
+        }
+        return $haystack;
+    }
+}
+
+/**
  * Format a number as a price with commas and optional currency symbol.
  *
  * @param float $num The number to be formatted.
@@ -52,18 +101,16 @@ function nice_price(float $num, ?string $currency_symbol = null): string|float {
 }
 
 /**
- * Accepts a string, converts it to lowercase, replaces all non-alphanumeric characters with a dash,
- * and trims any leading or trailing dashes.
- * 
- * @author Special thanks to framex who posted this fix on the help-bar
- * @see https://trongate.io/help_bar/thread/h7W9QyPcsx69
- * 
- * @param string value The string to be converted.
- * @param bool transliteration If you want to transliterate the string, set this to true.
- * 
- * @return string The slugified version of the string.
+ * Converts a string into a URL-friendly slug format.
+ *
+ * This function will transliterate the string if the 'intl' extension is loaded and transliteration is set to true.
+ * It then converts any non-alphanumeric characters to dashes, trims them from the start and end, and converts everything to lowercase.
+ *
+ * @param string $value The string to be converted into a slug.
+ * @param bool $transliteration Whether to transliterate characters to ASCII.
+ * @return string The slugified version of the input string.
  */
-function url_title($value, $transliteration = true) {
+function url_title(string $value, bool $transliteration = true): string {
     if (extension_loaded('intl') && $transliteration === true) {
         $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
         $value = $transliterator->transliterate($value);
@@ -78,7 +125,7 @@ function url_title($value, $transliteration = true) {
 /**
  * Safely escape and format a string for various output contexts.
  *
- * @param string|null $input The string to be escaped.
+ * @param string $input The string to be escaped.
  * @param string $encoding (Optional) The character encoding to use for escaping. Defaults to 'UTF-8'.
  * @param string $output_format (Optional) The desired output format: 'html' (default), 'xml', 'json', 'javascript', or 'attribute'.
  * 
@@ -86,11 +133,11 @@ function url_title($value, $transliteration = true) {
  * @throws Exception if an unsupported output format is provided.
  */
 function out(?string $input, string $encoding = 'UTF-8', string $output_format = 'html'): string {
-    if ($input === null) {
-        return ''; // Return an empty string if input is null
-    }
-
     $flags = ENT_QUOTES;
+
+    if ($input === null) {
+        $input = '';
+    }
 
     if ($output_format === 'xml') {
         $flags = ENT_XML1;
@@ -169,4 +216,66 @@ function replace_html_tags(string $content, array $specifications): string {
 function remove_html_code(string $content, string $opening_pattern, string $closing_pattern): string {
     $pattern = '/(' . preg_quote($opening_pattern, '/') . ')(.*?)(\s*?' . preg_quote($closing_pattern, '/') . ')/is';
     return preg_replace($pattern, '', $content);
+}
+
+/**
+ * Filter and sanitize a string.
+ *
+ * @param string $str The input string to be filtered and sanitized.
+ * @param string[] $allowed_tags An optional array of allowed HTML tags (default is an empty array).
+ * @return string The filtered and sanitized string.
+ */
+function filter_str(string $str, array $allowed_tags = []): string {
+    // Remove HTML & PHP tags
+    $str = strip_tags($str, implode('', $allowed_tags));
+
+    // Convert multiple consecutive whitespaces to a single space, except for line breaks
+    $str = preg_replace('/[^\S\r\n]+/', ' ', $str);
+
+    // Trim leading and trailing white space
+    $str = trim($str);
+
+    return $str;
+}
+
+/**
+ * Alias for filter_str function for backward compatibility.
+ * @deprecated This function is deprecated and will be removed from the Trongate framework on June 3, 2026.
+ * Developers are encouraged to globally replace instances of 'filter_string(' with 'filter_str(' throughout their site or application.
+ */
+function filter_string(string $string, array $allowed_tags = []): string {
+    return filter_str($string, $allowed_tags);
+}
+
+/**
+ * Filter and sanitize a name.
+ *
+ * @param string $name The input name to be filtered and sanitized.
+ * @param string[] $allowed_chars An optional array of allowed characters.
+ * @return string The filtered and sanitized name.
+ */
+function filter_name(string $name, array $allowed_chars = []) {
+    // Similar to filter_string() but better suited for usernames, etc.
+
+    // Remove HTML & PHP tags (please read note above for more!)
+    $name = strip_tags($name);
+
+    // Apply XSS filtering
+    $name = htmlspecialchars($name);
+
+    // Create a regex pattern that includes the allowed characters
+    $pattern = '/[^a-zA-Z0-9\s';
+    $pattern .= !empty($allowed_chars) ? '[' . implode('', $allowed_chars) . ']' : ']';
+    $pattern .= '/';
+
+    // Replace any characters that are not in the allowed list
+    $name = preg_replace($pattern, '', $name);
+
+    // Convert double spaces to single spaces
+    $name = preg_replace('/\s+/', ' ', $name);
+
+    // Trim leading and trailing white space
+    $name = trim($name);
+
+    return $name;
 }

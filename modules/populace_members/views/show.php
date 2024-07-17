@@ -48,6 +48,7 @@
         </div>
     </div>
 
+    <?= Modules::run('trongate_filezone/_draw_summary_panel', $update_id, $filezone_settings); ?>
     <div class="card">
         <div class="card-heading">
             Comments

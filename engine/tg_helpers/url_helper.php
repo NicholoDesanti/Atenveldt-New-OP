@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Get the current URL of the web page.
  *
@@ -41,6 +40,27 @@ function segment(int $num, ?string $var_type = null) {
 function remove_query_string(string $string): string {
     $parts = explode("?", $string, 2);
     return $parts[0];
+}
+
+/**
+ * Get the number of segments in the current URL after the base URL.
+ *
+ * @return int The number of URL segments after the base URL.
+ */
+function get_num_segments(): int {
+    $url_path = str_replace(BASE_URL, '', current_url());
+    $url_segments = explode('/', $url_path);
+    return count($url_segments);
+}
+
+/**
+ * Get the value of the last segment of the current URL.
+ *
+ * @return string The last segment of the URL.
+ */
+function get_last_segment(): string {
+    $last_segment = get_last_part(current_url(), '/');
+    return $last_segment;
 }
 
 /**
@@ -100,7 +120,13 @@ function anchor(string $target_url, $text, ?array $attributes = null, ?string $a
         if (isset($attributes['rewrite_url'])) {
             unset($attributes['rewrite_url']);
         } else {
-            $target_url = attempt_return_nice_url($target_url);
+            //takes an assumed_url and returns the nice_url
+            foreach (CUSTOM_ROUTES as $key => $value) {
+                $pos = strpos($target_url, $value);
+                if (is_numeric($pos)) {
+                    $target_url = str_replace($value, $key, $target_url);
+                }
+            }
         }
 
         foreach ($attributes as $key => $value) {
