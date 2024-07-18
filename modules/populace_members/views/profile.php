@@ -29,7 +29,7 @@
             <div class="row g-0 border border-light-subtle rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 bg-light position-relative">
                 <div class="col p-4 d-flex flex-column position-static">
                 <strong class="d-inline-block mb-2 text-primary-emphasis">Blazon</strong>
-                <p class="card-text mb-auto"><?php echo htmlspecialchars($blazon); ?></p>
+                <p class="card-text mb-auto"><?php echo htmlspecialchars($blazon ?? ''); ?></p>
                 </div>
                 <div class="col-auto d-none p-3 d-lg-block">
                 <img class="img img-fluid" src="populace_members_module/Images/NoArms.jpg" alt="" width="150">
@@ -50,43 +50,54 @@
             </div>
 </div>
 
-  <div class="container">
-  <div class="row mt-lg-5"> 
+<div class="container">
+    <div class="row mt-lg-5"> 
         <div class="">
             <ul class="nav nav-tabs">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Awards</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="#">Offices</a>
-              </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Awards</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Offices</a>
+                </li>
             </ul>
         </div>
         <div class="p-4 border-bottom">
-                    <h2>Awards</h2>
-                    <div class="table-responsive small">
+            <h2>Awards</h2>
+            <div class="table-responsive small">
                 <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Rank</th>
-                    <th scope="col">Awarded by</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td><?php ?></td>
-                    <td><?php ?></td>
-                    <td><?php ?></td>
-                    <td><?php ?></td>
-                    <td><?php ?></td>
-                    </tr>
-                </tbody>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                          <!--  <th scope="col">Rank</th>-->
+                            <th scope="col">Awarded by</th>
+                            <th scope="col">Date</th>
+                           <!-- <th scope="col">Level</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($awards)) : ?>
+                            <?php foreach ($awards as $award) : ?>
+                                <tr>
+                                    <td><?php echo $award->award_name; ?></td>
+                                    <!--<td><?php echo $award->rank; ?></td> <!-- Replace 'rank' with the actual column name if different -->
+                                    <td><?php echo $award->crown_name; ?></td>
+                                    <td><?php echo $award->date_received; ?></td>
+                                    <!--<td><?php echo $award->level; ?></td> <!-- Replace 'level' with the actual column name if different -->
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="5">No awards found for this member.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
                 </table>
-      </div>
+            </div>
+        </div>
     </div>
+</div>
+
     <!--<span class="badge d-flex align-items-center p-1 pe-2 text-warning-emphasis bg-warning-subtle border border-warning-subtle rounded-pill"><img class="rounded-circle me-1" width="24" height="24" src="https://wiki.atenveldt.org/images/4/49/Aten_Beacon_desert.png" alt="Light of Atenveldt"> Service (Level 2)
   </span>-->
         

@@ -19,5 +19,13 @@ $bootstrap5_theme = [
     "template" => "bootstrap5.php",
 ];
 $themes['bootstrap5'] = $bootstrap5_theme;
+
+$bootstrappy_theme = [
+    "dir" => "bootstrappy/dark",
+    "template" => "bootstrappy.php",
+];
+
+$themes['bootstrappy'] = $bootstrappy_theme;
 define('THEMES', $themes);
+
 

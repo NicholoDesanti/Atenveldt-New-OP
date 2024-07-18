@@ -13,6 +13,14 @@
 <div class="top-gutter">
 	<div class="logo"><?= anchor('#', OUR_NAME) ?></div>
 	<div class="top-rhs">
+		<div class="hide-sm"><?= anchor('#', '<i class=\'fa fa-envelope\'></i> Enquiries (88)', array('class' => 'highlight')) ?></div>
+		<div class="hide-sm"><?= anchor('#', '<i class=\'fa fa-shopping-cart\'></i> Orders') ?></div>
+		<div class="hide-sm language-selector"><?php
+		$language_options['ar'] = 'Arabic';
+		$language_options['en'] = 'English';
+		$language_options['fr'] = 'French';
+		echo form_dropdown('language', $language_options, 'en');
+		?></div>
 		<div id="top-rhs-selector">
 		<i class="fa fa-user"></i><span id="admin-down-arrow">▼</span></div>
 		<div id="admin-settings-dropdown">
@@ -28,7 +36,36 @@
 <div class="wrapper" style="opacity:0">
 	<div id="sidebar">
 		<nav id="left-nav">
-		<div><?= Template::partial('partials/admin/dynamic_nav') ?></div>
+			<ul>
+				<li><?= anchor('#', '<i class=\'fa fa-tachometer\'></i> Dashboard') ?></li>
+				<li><?= anchor('#', '<i class=\'fa fa-shopping-cart\'></i> Orders') ?></li>
+				<li class="dropdown"><div><i class="fa fa-envelope"></i> Enquiries</div><div><i class="fa fa-caret-right"></i></div></li>
+				<li class="dropdown-area">
+					<ul>
+				  		<li><?= anchor('#', 'Inbox') ?></li>
+				  		<li><?= anchor('#', 'Junk') ?></li>
+				  		<li><?= anchor('#', 'Archives') ?></li>
+			  	    </ul>				
+				</li>
+				<li><?= anchor('#', '<i class=\'fa fa-user\'></i> Customers') ?></li>
+				<li><?= anchor('#', '<i class=\'fa fa-tachometer\'></i> Items Inventory') ?></li>
+				<li class="dropdown"><div><i class="fa fa-file-text-o"></i> Content Management</div><div><i class="fa fa-caret-right"></i></div></li>
+				<li class="dropdown-area">
+					<ul>
+				  		<li><?= anchor('#', 'About Us') ?></li>
+				  		<li><?= anchor('#', 'Refund Policy') ?></li>
+				  		<li><?= anchor('#', 'Terms &amp; Conditions') ?></li>
+			  	    </ul>				
+				</li>
+				<li class="dropdown"><div><i class="fa fa-gears"></i> Settings</div><div><i class="fa fa-caret-right"></i></div></li>
+				<li class="dropdown-area">
+					<ul>
+				  		<li><?= anchor('#', 'First Link') ?></li>
+				  		<li><?= anchor('#', 'Second Link') ?></li>
+				  		<li><?= anchor('#', 'Third Link') ?></li>
+			  	    </ul>				
+				</li>
+		    </ul>
 	    </nav>
 	</div>
 	<div class="center-stage"><?= Template::display($data) ?></div>

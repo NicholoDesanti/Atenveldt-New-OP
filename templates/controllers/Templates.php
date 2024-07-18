@@ -1,6 +1,13 @@
 <?php
 class Templates extends Trongate {
 
+    function bootstrappy($data) {
+        load('bootstrappy', $data);
+    }
+
+    function bootstrap5($data) {
+        load('bootstrap5', $data);
+    }
     /**
      * Loads the 'public' view with provided data.
      *

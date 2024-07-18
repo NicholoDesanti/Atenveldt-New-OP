@@ -75,7 +75,22 @@ function profile(int $update_id): void {
     }
 
     // Pass admin login status to the view
-    
+     // Fetch member details
+     $data['member'] = $this->model->get_where($update_id, 'populace_members');
+
+     // Fetch awards for this member
+     $sql = "SELECT * FROM populace_awards WHERE populace_members_id = :populace_members_id";
+     $params['populace_members_id'] = $update_id;
+     $awards = $this->model->query_bind($sql, $params, 'object');
+
+     // Enhance awards with names
+     foreach ($awards as $award) {
+         $award->award_name = $this->_get_award_name($award->awards_id);
+         $award->crown_name = $this->_get_crown_name($award->crowns_id);
+   
+     }
+     
+     $data['awards'] = $awards;
     $data['update_id'] = $update_id;
 
     $data['view_file'] = 'profile';
@@ -399,6 +414,21 @@ function search_suggestions(): void {
         return $data;
     }
 
+    function _get_populace_name(?int $populace_id): ?string {
+        if ($populace_id === null) {
+            return null;
+        }
+
+        // Fetch the record from the 'populace_members' table
+        $member = $this->model->get_where($populace_id, 'populace_members');
+
+        if ($member) {
+            return $member->name; // Replace 'name' with the actual column name for the member's full name
+        }
+
+        return null;
+    }
+
     function _get_branches_options($selected_key) {
         $this->module('module_relations');
         $options = $this->module_relations->_fetch_options($selected_key, 'populace_members', 'branches');
@@ -425,4 +455,45 @@ function _get_branches_name(?int $branches_id): ?string
     }
     return null;
 }
+function _get_award_name(?int $award_id): ?string {
+    if ($award_id === null) {
+        return null;
+    }
+
+    // Fetch the record from the 'awards' table
+    $award = $this->model->get_where($award_id, 'awards');
+
+    if ($award) {
+        return $award->name; // Replace 'name' with the actual column name for the award's name
+    }
+
+    return null;
+}
+
+function _get_crown_name(?int $crown_id): ?string {
+    if ($crown_id === null) {
+        return null;
+    }
+
+    // Fetch the record from the 'crowns' table
+    $crown = $this->model->get_where($crown_id, 'crowns');
+
+    if ($crown) {
+        // Fetch names of Sovereign and Consort using _get_populace_name function
+        $sovereign_name = $this->_get_populace_name($crown->sovereign);
+        $consort_name = $this->_get_populace_name($crown->consort);
+
+        // Combine names if both are not null, otherwise use the available name
+        if ($sovereign_name !== null && $consort_name !== null) {
+            return $sovereign_name . ' & ' . $consort_name;
+        } elseif ($sovereign_name !== null) {
+            return $sovereign_name;
+        } elseif ($consort_name !== null) {
+            return $consort_name;
+        }
+    }
+
+    return null;
+}
+
 }
